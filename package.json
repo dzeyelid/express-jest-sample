@@ -1,10 +1,11 @@
 {
-  "name": "express-jest",
+  "name": "express-jest-sample",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage --coverageReporters=cobertura"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
