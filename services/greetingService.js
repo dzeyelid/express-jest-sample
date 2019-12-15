@@ -1,0 +1,3 @@
+exports.greet = () => {
+  return 'Hello'
+}
