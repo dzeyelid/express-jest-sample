@@ -1,5 +1,7 @@
 const greetingService = require('./greetingService');
 
-test('Return correct string', () => {
-  expect(greetingService.greet()).toBe('Hello');
+test('greetingService.greet() が正しい値を返却すること', () => {
+  const value = greetingService.greet();
+  expect(value).toBe('Hello');
+  expect(value).not.toMatch(/!/);
 });

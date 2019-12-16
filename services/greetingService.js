@@ -1,3 +1,3 @@
 exports.greet = () => {
-  return 'Hello'
+  return 'Hello!'
 }
