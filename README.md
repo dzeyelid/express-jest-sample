@@ -2,6 +2,8 @@
 
 This is an experimental project for me to learn how test Express.js project efficiently.
 
+[![Build Status](https://dev.azure.com/dz-dev/express-jest/_apis/build/status/dzeyelid.express-jest-sample?branchName=master)](https://dev.azure.com/dz-dev/express-jest/_build/latest?definitionId=5&branchName=master)
+
 ## Base requirements
 
 - This project provides simple APIs.
