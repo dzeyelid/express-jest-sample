@@ -16,4 +16,4 @@ This is an experimental project for me to learn how test Express.js project effi
 
 ## Acknowledgments
 
-Special thanks for @Leko !
+Special thanks for [@Leko](https://github.com/Leko)-san !
