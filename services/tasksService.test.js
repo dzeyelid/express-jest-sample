@@ -1,4 +1,3 @@
-const task = require('../models/task');
 const models = require('../models');
 const tasksService = require('./tasksService');
 
@@ -25,7 +24,7 @@ describe('tasksService', () => {
         {
           title: 'Happy new year!',
           dueDate: '2020-01-01 00:00'
-        }
+        },
       ];
 
       models.Task.$queueResult([
