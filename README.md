@@ -16,6 +16,13 @@ This is an experimental project for me to learn how test Express.js project effi
 - E2E test with supertest
 - Mocking database in test
 
+## How to run
+
+```bash
+npm install
+node_modules/.bin/sequelize db:migrate
+```
+
 ## Acknowledgments
 
 Special thanks for [@Leko](https://github.com/Leko)-san !
