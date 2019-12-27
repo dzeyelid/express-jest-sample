@@ -21,8 +21,14 @@ This is an experimental project for me to learn how test Express.js project effi
 ```bash
 npm install
 node_modules/.bin/sequelize db:migrate
-npm run test
 npm run start
+```
+
+## How to test
+
+```bash
+npm install
+npm run test
 ```
 
 ## Acknowledgments
