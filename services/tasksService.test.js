@@ -1,43 +1,78 @@
+/**
+ * Attention:
+ *   The code that using sequelize-mock was moved to `e2e-tests/tasks.test.js`.
+ *   This test includes samples of using a test database in memory.
+ */
+
+const Umzug = require('umzug');
+const sequelize_fixtures = require('sequelize-fixtures');
+const testUtils = require('../testUtils');
 const models = require('../models');
 const tasksService = require('./tasksService');
 
-// Create mock base of sequelize
-jest.mock('../models/task', () => () => {
-  const SequelizeMock = require('sequelize-mock');
-  const dbMock = new SequelizeMock();
-  return dbMock.define('Task', {  // Default data
-      title: 'Many days have left in this year yet.',
-      dueDate: '2019-11-01 00:00'
-    }
-  );
+testUtils.extend();
+
+/**
+ * Migrate test database
+ * References:
+ *   - https://github.com/sequelize/umzug
+ *   - https://stackoverflow.com/questions/42811710/sequelize-umzug-migrations
+ */
+const umzug = new Umzug({
+  storage: 'sequelize',
+  storageOptions: {
+    sequelize: models.sequelize,
+  },
+  migrations: {
+    params: [
+      models.sequelize.getQueryInterface(),
+      models.Sequelize,
+    ],
+  }
+});
+
+beforeAll(async () => {
+  await umzug.up();
+
+  // Seed fixtures
+  await sequelize_fixtures.loadFile('fixtures/tasks.yaml', models);
+});
+
+afterAll(async () => {
+  await umzug.down();
 });
 
 describe('tasksService', () => {
-  describe('list', () => {
-    it('Should return tasks', async () => {
-      // Mock task model
-      const data = [
-        {
+
+  describe('list()', () => {
+    it('should return tasks', async () => {
+      const expected = [
+        expect.objectContaining({
           title: 'A new year comes soon.',
-          dueDate: '2019-12-31 23:59',
-        },
-        {
+          dueDate: expect.toBeSameDate('2019-12-31 23:59'),
+        }),
+        expect.objectContaining({
           title: 'Happy new year!',
-          dueDate: '2020-01-01 00:00'
-        },
+          dueDate: expect.toBeSameDate('2020-01-01 00:00'),
+        }),
       ];
 
-      models.Task.$queueResult([
-        models.Task.build(data[0]),
-        models.Task.build(data[1]),
-      ]);
-
       const tasks = await tasksService.list();
-      expect(tasks).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining(data[0]),
-          expect.objectContaining(data[1]),
-        ]));
+      expect(tasks).toEqual(expect.arrayContaining(expected));
     });
   });
+
+  describe('create()', () => {
+    it('should fail with empty data', () => {
+      expect.assertions(2);
+      const data = {};
+      return tasksService.create(data).catch(e => {
+        expect(e).toBeInstanceOf(models.Sequelize.ValidationError);
+        expect(e.message).toEqual(
+          expect.stringMatching(/notNull Violation: Task\.title cannot be null/),
+          expect.stringMatching(/notNull Violation: Task\.dueDate cannot be null/),
+        );
+      });
+    })
+  })
 });
